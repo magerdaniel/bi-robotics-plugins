@@ -79,6 +79,12 @@ var chartKitchenByDatenWGD9DE0F7AD44D41058672C6FBF6F5A18D;(()=>{"use strict";var
     };
   }
 
+  var MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  function monthName(v) {                       // "2026-03-01" or "2026-03" -> "Mar"; anything else as it is
+    var m = /^\d{4}-(\d{2})(-\d{2})?/.exec(String(v));
+    return m ? MONTHS[parseInt(m[1], 10) - 1] : v;
+  }
+
   /* The categorical DataView ChartKitchen reads: a category column per dimension role (its display form, rows in
    * the order of its key), a value column per KPI role, the format objects as metadata.objects. */
   function dataView(table, spec) {
@@ -103,8 +109,9 @@ var chartKitchenByDatenWGD9DE0F7AD44D41058672C6FBF6F5A18D;(()=>{"use strict";var
       if (r.kind === "dimension") {
         var shown = r.display || (r.ref + ".name");               // the display form's column, else the key
         var i = at(shown) >= 0 ? at(shown) : at(r.ref);
+        var show = r.dateFormat === "month" ? monthName : function (v) { return v; };   // a month as Jan ... (role dateFormat)
         categories.push({ source: { displayName: r.label || r.ref, roles: roles, type: { text: true } },
-                          values: rows.map(function (row) { return row[i]; }) });
+                          values: rows.map(function (row) { return show(row[i]); }) });
       } else {
         var j = at(r.ref);
         values.push({ source: { displayName: r.label || r.ref, roles: roles, isMeasure: true, format: r.format },
