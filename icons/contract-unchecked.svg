@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+  <title>Data contract not checked</title>
+  <!-- cuffs -->
+  <path d="M3 28.5l6.5-6.5 5.5 5.5-6.5 6.5z"/>
+  <path d="M45 28.5l-6.5-6.5-5.5 5.5 6.5 6.5z"/>
+  <!-- left hand: back of the hand, fingers wrapping under -->
+  <path d="M12.5 24.5l4.5-2.5h4.5"/>
+  <path d="M11.8 31l8.9 8.3a2.2 2.2 0 0 0 3.1 0l9.4-8.3"/>
+  <path d="M20.8 34.5l3 2.8"/>
+  <path d="M24.5 31.5l3 2.8"/>
+  <!-- right hand: thumb over -->
+  <path d="M35.5 24.5l-5-2.5h-4l-6.5 5.2a2.1 2.1 0 0 0 2.8 3.1l4.2-2.8 6.2 5.2"/>
+  <!-- status badge -->
+  <circle cx="24" cy="10" r="8.5" fill="#9e9e9e" stroke="none"/>
+  <g stroke="#fff" stroke-width="2.6"><path d="M20.5 10h7"/></g>
+</svg>
