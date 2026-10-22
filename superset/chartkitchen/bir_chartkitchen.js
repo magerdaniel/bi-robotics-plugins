@@ -84,6 +84,18 @@ var chartKitchenByDatenWGD9DE0F7AD44D41058672C6FBF6F5A18D;(()=>{"use strict";var
     var m = /^\d{4}-(\d{2})(-\d{2})?/.exec(String(v));
     return m ? MONTHS[parseInt(m[1], 10) - 1] : v;
   }
+  function yearOf(v) {                          // "2024-06-30", "2024" or a timestamp in ms (Superset) -> "2024"
+    if (typeof v === "number" && v > 1e11) { return String(new Date(v).getUTCFullYear()); }
+    var m = /^(\d{4})/.exec(String(v));
+    return m ? m[1] : v;
+  }
+  function quarterOf(v) {                       // a date or timestamp -> "Q2 2024"
+    var d = typeof v === "number" && v > 1e11 ? new Date(v) : null;
+    var m = d ? null : /^(\d{4})-(\d{2})/.exec(String(v));
+    var y = d ? d.getUTCFullYear() : (m ? parseInt(m[1], 10) : null), mo = d ? d.getUTCMonth() + 1 : (m ? parseInt(m[2], 10) : null);
+    return y === null ? v : "Q" + Math.ceil(mo / 3) + " " + y;
+  }
+  var DATE_FORMATS = { month: monthName, year: yearOf, quarter: quarterOf };
 
   /* The categorical DataView ChartKitchen reads: a category column per dimension role (its display form, rows in
    * the order of its key), a value column per KPI role, the format objects as metadata.objects. */
@@ -109,7 +121,7 @@ var chartKitchenByDatenWGD9DE0F7AD44D41058672C6FBF6F5A18D;(()=>{"use strict";var
       if (r.kind === "dimension") {
         var shown = r.display || (r.ref + ".name");               // the display form's column, else the key
         var i = at(shown) >= 0 ? at(shown) : at(r.ref);
-        var show = r.dateFormat === "month" ? monthName : function (v) { return v; };   // a month as Jan ... (role dateFormat)
+        var show = DATE_FORMATS[r.dateFormat] || function (v) { return v; };   // a month as Jan, a year as 2024 (role dateFormat)
         categories.push({ source: { displayName: r.label || r.ref, roles: roles, type: { text: true } },
                           values: rows.map(function (row) { return show(row[i]); }) });
       } else {
